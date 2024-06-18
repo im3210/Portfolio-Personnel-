@@ -1,0 +1,30 @@
+body
+{
+    font-size: 40px;
+    font-family: ' Arial, sans-serif';
+    padding: 40px;
+    background-color: rgb(249, 246, 246);
+    /*border: 2px solid black; /* Ajoute une bordure 
+    border-radius: 5px;      Arrondit les coins de la bordure */
+   
+}
+.contrainer
+{
+
+}
+
+.square
+{
+    border: 300px solid black;
+    background-color:black;
+    border-radius: 10px;
+    padding: 20px;
+
+}
+.name
+{
+    color: white);
+    position: absolute;
+    top: 10px; /* Distance de 10 pixels depuis le haut du conteneur */
+    left: 10px; /* Distance de 10 pixels depuis la droite du conteneur */
+}
