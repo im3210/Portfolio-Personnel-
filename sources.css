@@ -7,53 +7,50 @@ body {
     background-color: rgb(5, 5, 5);
 }
 
-.container {
-    position: relative; /* Pour que les éléments enfants puissent être positionnés absolument */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Pour centrer verticalement */
-}
 
-.square {
-    border: 2px solid black;
-    background-color: rgb(47, 47, 47);
-    border-radius: 10px;
-    padding: 2px;
-    position: relative; /* Pour positionner .name absolument */
-    width: 300px; /* Définir une largeur fixe pour le carré */
-    height: 300px; /* Définir une hauteur fixe pour le carré */
-    box-sizing: border-box; /* Inclut le padding et la bordure dans les dimensions */
-}
-.square1 {
-    border: 2px solid rgb(208, 26, 26);s
-    background-color: rgb(208, 26, 26);
-    border-radius: 10px;
-    padding: 2px;
-    position: relative; /* Pour positionner .name absolument */
-    width: 300px; /* Définir une largeur fixe pour le carré */
-    height: 300px; /* Définir une hauteur fixe pour le carré */
-    box-sizing: border-box; /* Inclut le padding et la bordure dans les dimensions */
-}
+/*header*/
 
-.name {
-    color: white;
-    position: absolute;
-    top: 10px; /* Distance de 10 pixels depuis le haut du conteneur */
-    left: 10px; /* Distance de 10 pixels depuis la droite du conteneur */
-    font-size: 24px;
-}
-.first-name
+header
 {
-        font-weight: bold; /* Met le texte en gras */
-
+    /*margin-top: 0px;
+    border-radius: 20px;
+    background-color: aliceblue;*/
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    border-radius: 20px;
 }
-.square img {
-    display: block;
-    width: 150px; /* Réduire la largeur de l'image */
-    height:200px; /* Ajuster automatiquement la hauteur pour garder les proportions */
-    margin-left: 0 auto; /* Centrer l'image horizontalement */
-    margin-top: 50px; /* Pour éloigner l'image du texte en haut */
-    border-radius: 10px;
-
+.logo img
+{
+    height: 150px;
+    width: 150px;
+}
+nav
+{
+    padding: 10px 100px;
+}
+nav ul 
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+nav ul li {
+    margin-left: 35px;
+    margin-top: 0px;
+}
+nav ul li a {
+    text-decoration: none;
+    font-weight: bold;
+}
+.wrapper img
+{
+    padding: 20px;
+    margin: 30px;
+    border-radius: 50%;
+    
 }
