@@ -1,20 +1,16 @@
 /* sources.css */
 
 body {
-    font-size: 40px;
+    font-size: 20px; /* Réduire la taille de police pour qu'elle soit plus proportionnée */
     font-family: Arial, sans-serif;
     padding: 10px;
     background-color: rgb(5, 5, 5);
+    color: white; /* Changer la couleur du texte pour qu'il soit lisible sur le fond noir */
 }
 
+/* header */
 
-/*header*/
-
-header
-{
-    /*margin-top: 0px;
-    border-radius: 20px;
-    background-color: aliceblue;*/
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -23,34 +19,43 @@ header
     border-bottom: 1px solid #ddd;
     border-radius: 20px;
 }
-.logo img
-{
-    height: 150px;
-    width: 150px;
+.logo img {
+    height: 75px; /* Ajuster la hauteur de l'image du logo */
+    width: 75px; /* Ajuster la largeur de l'image du logo */
+    border-radius: 50%; /* Ajouter un border-radius pour rendre l'image circulaire */
+    border: 3px solid #333; /* Ajouter une bordure autour de l'image */
 }
-nav
-{
-    padding: 10px 100px;
+nav {
+    padding: 10px 20px; /* Ajuster le padding de la navigation */
 }
-nav ul 
-{
+nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
 }
 nav ul li {
-    margin-left: 35px;
+    margin-left: 20px; /* Ajuster l'espacement entre les éléments de la liste */
     margin-top: 0px;
 }
 nav ul li a {
     text-decoration: none;
     font-weight: bold;
+    color: #333; /* Couleur des liens */
 }
-.wrapper img
-{
+nav ul li a:hover {
+    color: #007bff; /* Couleur au survol */
+}
+.wrapper img {
+    height: 250px;
+    weight: 250px;
     padding: 20px;
-    margin: 30px;
+    margin: 30spx;
     border-radius: 50%;
+}
+.wrapper p
+{
     
+    padding: 10px;
+    margin:100px;
 }
