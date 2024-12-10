@@ -1,99 +1,112 @@
-/**
- * \file Bottin.h
- * \brief Classe définissant un bottin téléphonique.
- * \author Thierry Eude
- * 
- */
+#include <gtest/gtest.h>
+#include "Bottin.h"
+#include <fstream>
 
-#ifndef BOTTIN__H
-#define BOTTIN__H
-
-#include <stdexcept>
-#include <iostream>
-#include <fstream> 
-#include <string>
-#include <vector>
-#include "TableHachage.h"
-#include "FoncteurHachage.hpp"
-
-
-namespace TP3
-{
-
-/** 
- * \class Bottin
- *
- * \brief classe représentant un bottin
- *
- */
-class Bottin
-{
-    class Entree;
-
-public:
-
-    // à compléter (voir l'énoncé du TP)
-    Bottin(){};
-    Bottin(std::ifstream& p_fichierEntree, size_t p_table_size = 100);
-    void ajouter(const std::string& p_nom, const std::string & p_prenom, const std::string & p_telephoneFixe,
-                 const std::string & p_cellulaire, const std::string & p_courriel);
-    const Entree&
-    trouverAvecNomPrenom(const std::string& p_nom, const std::string & p_prenom) const;
-    const Entree&
-    trouverAvecTelephone(const std::string & p_telephoneFixe) const;
-    void afficherBottin(std::ostream &) const;
-    int nombreEntrees() const;
-    double ratioDeCollisionsNomPrenom() const;
-    double ratioDeCollisionTelephone() const;
-    int maximumNbCollisionNomPrenom() const;
-    int maximumNbCollisionTelephone() const;
-
-    friend std::ostream& operator<<(std::ostream &, const Bottin&);
-
-private:
-
-    /** 
-     * \class Entree
-     *
-     * \brief classe représentant une entrée du bottin
-     *
-     */
-    class Entree
-    {
-    public:
-
-        std::string m_nom;
-        std::string m_prenom;
-        std::string m_telephoneFixe;
-        std::string m_cellulaire;
-        std::string m_courriel;
-
-        Entree(const std::string& p_nom, const std::string & p_prenom, const std::string & p_telephobeFixe, const std::string & p_cellulaire, const std::string & p_courriel)
-        : m_nom(p_nom), m_prenom(p_prenom), m_telephoneFixe(p_telephobeFixe), m_cellulaire(p_cellulaire), m_courriel(p_courriel)
-        {
+// Fixture pour initialiser un objet Bottin à partir d'un fichier
+class BottinTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        std::ifstream fichier("../bottin.txt");
+        if (!fichier) {
+            std::cerr << "Erreur d'ouverture du fichier!" << std::endl;
+            throw std::runtime_error("Fichier introuvable ou illisible.");
         }
+        bottin = new TP3::Bottin(fichier);
+        fichier.close();
+    }
 
-        friend std::ostream& operator<<(std::ostream & p_out, const Entree& p_source)
-        {
-            p_out << p_source.m_nom << ", " << p_source.m_prenom << ", " << p_source.m_telephoneFixe << ", " << p_source.m_cellulaire << ", " << p_source.m_courriel << std::endl;
-            return p_out;
-        }
-    };
-private:
-    std::vector<Entree> m_tableauDesEntrees;
-    labTableHachage::TableHachage<std::string, int, labTableHachage::HString1> m_tableParTelephone;
-    labTableHachage::TableHachage<std::string, int, labTableHachage::HString1> m_tableParNomPrenom;
+    void TearDown() override {
+        delete bottin;
+    }
 
-    // Statistiques sur les collisions
-    size_t m_nombreCollisionsTelephone = 0;
-    size_t m_nombreCollisionsNomPrenom = 0;
-    size_t m_maxCollisionsTelephone = 0;
-    size_t m_maxCollisionsNomPrenom = 0;
-
-
-    
+    TP3::Bottin* bottin;
 };
 
+// Test pour recherche par téléphone (entrée valide)
+TEST_F(BottinTest, TestTrouverAvecTelephoneValide) {
+    const auto& entree = bottin->trouverAvecTelephone("(530) 752-3457");
+    EXPECT_EQ(entree.m_nom, "Adams Jr");
+    EXPECT_EQ(entree.m_prenom, "Theodore E");
+    EXPECT_EQ(entree.m_telephoneFixe, "(530) 752-3457");
+    EXPECT_EQ(entree.m_cellulaire, "(530) 752-4361");
+    EXPECT_EQ(entree.m_courriel, "tjadams@ucdavis.edu");
 }
 
-#endif /* BOTTIN__H */
+// Test pour recherche par téléphone (entrée invalide)
+TEST_F(BottinTest, TestTrouverAvecTelephoneInvalide) {
+    EXPECT_THROW(bottin->trouverAvecTelephone("(514) 000-0000"), std::invalid_argument);
+}
+
+// Test pour recherche par nom/prénom (entrée valide)
+TEST_F(BottinTest, TestTrouverAvecNomPrenomValide) {
+    const auto& entree = bottin->trouverAvecNomPrenom("Abbott", "Ursula K");
+    EXPECT_EQ(entree.m_nom, "Abbott");
+    EXPECT_EQ(entree.m_prenom, "Ursula K");
+    EXPECT_EQ(entree.m_telephoneFixe, "(530) 752-7325");
+    EXPECT_EQ(entree.m_cellulaire, "(530) 752-8960");
+    EXPECT_EQ(entree.m_courriel, "sandra.alexander@ucop.edu");
+}
+
+// Test pour recherche par nom/prénom (entrée invalide)
+TEST_F(BottinTest, TestTrouverAvecNomPrenomInvalide) {
+    EXPECT_THROW(bottin->trouverAvecNomPrenom("Brown", "Bob"), std::invalid_argument);
+}
+
+// Test pour afficher le bottin
+TEST_F(BottinTest, TestAfficherBottin) {
+    std::ostringstream oss;
+    bottin->afficherBottin(oss); // Génère le contenu du bottin
+
+    // Charger tout le contenu attendu depuis le fichier bottin.txt
+    std::ifstream fichier("../bottin.txt");
+    ASSERT_TRUE(fichier.is_open()) << "Erreur : Impossible d'ouvrir le fichier bottin.txt";
+
+    // Ignorer la première ligne (le nombre d'entrées)
+    std::string ligne;
+    std::getline(fichier, ligne);
+
+    // Lire tout le contenu restant
+    std::string contenuAttendu((std::istreambuf_iterator<char>(fichier)),
+                                std::istreambuf_iterator<char>());
+    fichier.close();
+
+    // Comparer les contenus
+    EXPECT_EQ(oss.str(), contenuAttendu) << "Le contenu affiché du bottin ne correspond pas au contenu attendu.";
+}
+
+
+
+// Test pour vérifier le nombre d'entrées
+TEST_F(BottinTest, TestNombreEntrees) {
+    EXPECT_EQ(bottin->nombreEntrees(), 1438);
+}
+
+// Test pour le ratio de collisions noms/prénoms
+TEST_F(BottinTest, TestRatioCollisionsNomPrenom) {
+    double ratio = bottin->ratioDeCollisionsNomPrenom();
+    EXPECT_GE(ratio, 0.0);
+}
+
+// Test pour le ratio de collisions téléphones
+TEST_F(BottinTest, TestRatioCollisionsTelephone) {
+    double ratio = bottin->ratioDeCollisionTelephone();
+    EXPECT_GE(ratio, 0.0);
+}
+
+// Test pour le maximum de collisions noms/prénoms
+TEST_F(BottinTest, TestMaxCollisionsNomPrenom) {
+    int maxCollisions = bottin->maximumNbCollisionNomPrenom();
+    EXPECT_GE(maxCollisions, 0);
+}
+
+// Test pour le maximum de collisions téléphones
+TEST_F(BottinTest, TestMaxCollisionsTelephone) {
+    int maxCollisions = bottin->maximumNbCollisionTelephone();
+    EXPECT_GE(maxCollisions, 0);
+}
+
+// Main pour exécuter les tests
+int main(int argc, char** argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
