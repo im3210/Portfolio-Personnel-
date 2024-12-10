@@ -21,7 +21,7 @@ TEST_F(BottinTest, TestAfficherBottin) {
 }
 
 
-    void Bottin::afficherBottin(std::ostream& p_out) const {
+void Bottin::afficherBottin(std::ostream& p_out) const {
     for (size_t i = 0; i < m_tableauDesEntrees.size(); ++i) {
         const auto& entree = m_tableauDesEntrees[i];
         p_out << entree.m_nom << ", " << entree.m_prenom << "\t"
@@ -32,4 +32,3 @@ TEST_F(BottinTest, TestAfficherBottin) {
         }
     }
 }
-
